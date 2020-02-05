@@ -1,7 +1,8 @@
 singleton-config
 ================
 
-Global configurations using singleton design pattern.
+.. automodule:: singleton_config.singleton_config
+   :noindex:
 
 .. toctree::
    :maxdepth: 2
@@ -10,8 +11,7 @@ Global configurations using singleton design pattern.
    examples
    api
 
-Indices and tables
-==================
+Index
+=====
 
 * :ref:`genindex`
-* :ref:`search`
