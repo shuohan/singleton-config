@@ -30,7 +30,33 @@ class Singleton(type):
 
 
 class Config(metaclass=Singleton):
+    """Configurations with singleton design pattern.
 
+    By using singleton, each time users call ``Config()``, it will returns the
+    same instance to ensure the configurations are consistent throughout a whole
+    program.
+
+    Note:
+        Newly assigned config (as an attribute) should be registered via the
+        method :meth:`add_config`. Simple ``=`` assigment will be denied if it
+        is not registered.
+
+    Users can inherit from this class to add more configurations during
+    initialization.
+
+    Note:
+        Call ``super().__init__()`` in first line of the subclass ``__init__``.
+
+    This class supports loading and saving. If the value conversion is desired
+    during loading and saving, for example, an object need be converted into
+    string to be written in a json file, implement methods ``_save_{name}`` and
+    ``_load_{name}`` where ``{name}`` is the attribute name.
+
+    To show the configurations, call
+
+    >>> print(Config())
+
+    """
     def __init__(self):
         self._config = list()
 
