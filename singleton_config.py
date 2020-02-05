@@ -8,6 +8,8 @@ does not support __str__ function to print the config. The downside is that
 sphinx cannot show the default values of instance attributes.
 
 """
+import json
+
 
 class Singleton(type):
     """Singleton design pattern. This should be used as metaclass.
@@ -33,6 +35,7 @@ class Config(metaclass=Singleton):
         self._config = list()
 
     def __setattr__(self, name, value):
+        """Sets attr only when it has been added by :meth:`add_config`."""
         if name not in self._config:
             message = '%s is unknown. Use "add_attr" to add new attribute.'
             message = message % (name)
@@ -41,6 +44,7 @@ class Config(metaclass=Singleton):
             super().__setattr__(name, value)
 
     def add_config(self, name, default_value):
+        """Tracks a config."""
         self._config.append(name)
         setattr(self, name, default_value)
 
@@ -78,7 +82,11 @@ class Config(metaclass=Singleton):
 
         """
         for key, value in config.items():
-            setattr(self, key, value)
+            load = '_load_%s' % key
+            if hasattr(self, load):
+                getattr(self, load)(value)
+            else:
+                setattr(self, key, value)
 
     def save_json(self, filepath):
         """Saves configurations into a ``".json"`` file.
@@ -90,6 +98,14 @@ class Config(metaclass=Singleton):
         with open(filepath, 'w') as jfile:
             json.dump(self.save_dict(), jfile, indent=4)
 
-    def save_dict(cls):
+    def save_dict(self):
         """Returns a :class:`dict` of all configurations."""
-        return {key: getattr(self, key) for key in self._config}
+        result = dict()
+        for key in self._config:
+            save = '_save_%s' % key
+            if hasattr(self, save):
+                value = getattr(self, save)()
+            else:
+                value = getattr(self, key)
+            result[key] = value
+        return result
