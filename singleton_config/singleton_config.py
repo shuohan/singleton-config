@@ -2,7 +2,6 @@
 
 """Global configurations using singleton design pattern.
 
-
 Using class attributes has several disadvantages. For exmaple, it cannot
 override the setter function for more flexible attribute assignment. It also
 does not support ``__str__`` function to print the config. The downside is that

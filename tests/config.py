@@ -34,11 +34,12 @@ def test_config():
     assert id(config1) == id(config2)
 
     print(config2)
-    message = '\n'.join(['----------------',
-                         '__main__.Config:',
+    heading = '%s.Config:' % __name__
+    dash = '-' * len(heading)
+    message = '\n'.join([dash, heading,
                          '    a: 100',
                          '    b: 2',
-                         '----------------'])
+                         dash])
     assert config1.__str__() == message
 
     filename = 'test.json'

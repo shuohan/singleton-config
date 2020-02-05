@@ -38,8 +38,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
-    'sphinx.ext.doctest',
-    'sphinxcontrib.programoutput'
+    'sphinx.ext.doctest'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
