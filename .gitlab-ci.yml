@@ -5,14 +5,14 @@ stages:
   - deploy
 
 before_script:
-  - apk --no-cache add py3-pip python-dev
+  - apk --no-cache add py3-pip python-dev git
   - pip3 install sphinx sphinx_rtd_theme
   - pip3 install pytest coverage
 
 coverage:
   stage: test
   script:
-    - coverage run --source=config -m pytest tests/config.py
+    - coverage run --source=singleton_config -m pytest tests/config.py
     - coverage report -m
   coverage: '/^TOTAL.+?(\d+\%)$/'
   only:
