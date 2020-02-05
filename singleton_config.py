@@ -58,3 +58,38 @@ class Config(metaclass=Singleton):
         message.insert(0, '-' * max_line_len)
         message.append('-' * max_line_len)
         return '\n'.join(message)
+
+    def load_json(self, filepath):
+        """Loads configurations from a ``".json"`` file.
+
+        Args:
+            filepath (str): The filepath to the json file.
+
+        """
+        with open(filepath) as jfile:
+            loaded = json.load(jfile)
+        self.load_dict(loaded)
+
+    def load_dict(self, config):
+        """Loads configurations from a :class:`dict`.
+
+        Args:
+            config (dict): The configurations to load.
+
+        """
+        for key, value in config.items():
+            setattr(self, key, value)
+
+    def save_json(self, filepath):
+        """Saves configurations into a ``".json"`` file.
+
+        Args:
+            filepath (str): The filepath to the json file.
+
+        """
+        with open(filepath, 'w') as jfile:
+            json.dump(self.save_dict(), jfile, indent=4)
+
+    def save_dict(cls):
+        """Returns a :class:`dict` of all configurations."""
+        return {key: getattr(self, key) for key in self._config}
