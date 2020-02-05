@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Use singleton design pattern for config.
+"""Global configurations using singleton design pattern.
 
 Using class attributes has several disadvantages. For exmaple, it cannot
 override the setter function for more flexible attribute assignment. It also
-does not support __str__ function to print the config. The downside is that
+does not support ``__str__`` function to print the config. The downside is that
 sphinx cannot show the default values of instance attributes.
 
 """
@@ -63,7 +63,7 @@ class Config(metaclass=Singleton):
     def __setattr__(self, name, value):
         """Sets attr only when it has been added by :meth:`add_config`."""
         if name not in self._config:
-            message = '%s is unknown. Use "add_attr" to add new attribute.'
+            message = '%s is unknown. Use "add_config" to add new attribute.'
             message = message % (name)
             raise RuntimeError(message)
         else:
