@@ -24,8 +24,16 @@ def test_config():
 
     config2 = Config()
     assert config2.a == 100
-    print('all successful')
 
+    print(config2)
+    message = '\n'.join(['----------------',
+                         '__main__.Config:',
+                         '    a: 100',
+                         '    b: 2',
+                         '----------------'])
+    assert config1.__str__() == message
+
+    print('all successful')
 
 
 if __name__ == "__main__":

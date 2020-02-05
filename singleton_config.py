@@ -43,3 +43,18 @@ class Config(metaclass=Singleton):
     def add_config(self, name, default_value):
         self._config.append(name)
         setattr(self, name, default_value)
+
+    def __str__(self):
+        """Prints out all configurations."""
+        max_config_len = max([len(c) for c in self._config])
+        message = list()
+        name = '.'.join([self.__class__.__module__, self.__class__.__name__])
+        message.append(name + ':')
+        pattern = '    %%%ds: %%s' % max_config_len
+        for key in self._config:
+            value = str(getattr(self, key))
+            message.append(pattern % (key, value))
+        max_line_len = max([len(l) for l in message])
+        message.insert(0, '-' * max_line_len)
+        message.append('-' * max_line_len)
+        return '\n'.join(message)
