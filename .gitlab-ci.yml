@@ -1,0 +1,33 @@
+image: alpine
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - apk --no-cache add py3-pip python-dev
+  - pip3 install sphinx sphinx_rtd_theme
+  - pip3 install pytest coverage
+
+coverage:
+  stage: test
+  script:
+    - coverage run --source=config -m pytest tests/config.py
+    - coverage report -m
+  coverage: '/^TOTAL.+?(\d+\%)$/'
+  only:
+  - master
+
+pages:
+  stage: deploy
+  script:
+  - apk --no-cache add make
+  - cd docs/
+  - make html
+  - cd -
+  - mv docs/build/html public/
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
