@@ -22,9 +22,9 @@ copyright = '2020, Shuo Han'
 author = 'Shuo Han'
 
 # The full version, including alpha/beta/rc tags
-import subprocess
-command = ['git', 'describe', '--tags']
-release = subprocess.check_output(command).decode().strip()
+# import subprocess
+# command = ['git', 'describe', '--tags']
+# release = subprocess.check_output(command).decode().strip()
 
 
 # -- General configuration ---------------------------------------------------
