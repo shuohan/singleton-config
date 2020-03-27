@@ -7,7 +7,7 @@ Global configurations using singleton design pattern.
 ## Installation
 
 ```bash
-pip install https://gitlab.com/shan-utils/singleton-config.git
+pip install git+https://github.com/shuohan/singleton-config.git
 ```
 
 ## API and Examples
