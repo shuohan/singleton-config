@@ -6,7 +6,7 @@ import subprocess
 command = ['git', 'describe', '--tags']
 version = subprocess.check_output(command).decode().strip()
 
-setup(name='config',
+setup(name='singleton-config',
       version=version,
       description='Global configurations with singleton design pattern.',
       author='Shuo Han',
