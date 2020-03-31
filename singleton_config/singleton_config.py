@@ -94,7 +94,7 @@ class Config(metaclass=Singleton):
         name = '.'.join([self.__class__.__module__, self.__class__.__name__])
         message.append(name + ':')
         pattern = '    %%%ds: %%s' % max_config_len
-        for key in self._config:
+        for key in sorted(self._config):
             value = str(getattr(self, key))
             message.append(pattern % (key, value))
         max_line_len = max([len(l) for l in message])
