@@ -102,6 +102,18 @@ class Config(metaclass=Singleton):
         message.append('-' * max_line_len)
         return '\n'.join(message)
 
+    def has_config(self, name):
+        """Tests if it contains this config.
+
+        Args:
+            name (str): The name of the config to test.
+
+        Returns:
+            bool: Whether it has this config.
+
+        """
+        return name in self._config
+
     def load_json(self, filepath):
         """Loads configurations from a ``".json"`` file.
 
