@@ -128,6 +128,10 @@ class Config(metaclass=Singleton):
     def load_dict(self, config):
         """Loads configurations from a :class:`dict`.
 
+        Note:
+            If a method ``_load_{config}`` exists, use that method to load this
+            config.
+
         Args:
             config (dict): The configurations to load.
 
@@ -150,7 +154,16 @@ class Config(metaclass=Singleton):
             json.dump(self.save_dict(), jfile, indent=4)
 
     def save_dict(self):
-        """Returns a :class:`dict` of all configurations."""
+        """Returns a :class:`dict` of all configurations.
+
+        Note:
+            If a method ``_save_{config}`` exists, use that method to export
+            this config.
+
+        Returns:
+            dict: The exported dict.
+
+        """
         result = dict()
         for key in self._config:
             save = '_save_%s' % key
