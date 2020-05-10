@@ -97,9 +97,6 @@ class Config(metaclass=Singleton):
         for key in sorted(self._config):
             value = str(getattr(self, key))
             message.append(pattern % (key, value))
-        max_line_len = max([len(l) for l in message])
-        message.insert(0, '-' * max_line_len)
-        message.append('-' * max_line_len)
         return '\n'.join(message)
 
     def has_config(self, name):

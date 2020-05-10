@@ -35,11 +35,9 @@ def test_config():
 
     print(config2)
     heading = '%s.Config:' % __name__
-    dash = '-' * len(heading)
-    message = '\n'.join([dash, heading,
+    message = '\n'.join([heading,
                          '    a: 100',
-                         '    b: 2',
-                         dash])
+                         '    b: 2'])
     assert config1.__str__() == message
 
     filename = 'test.json'
