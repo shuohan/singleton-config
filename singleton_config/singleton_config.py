@@ -59,20 +59,33 @@ class Config(metaclass=Singleton):
     """
     def __init__(self):
         self._config = list()
+        self._private = list()
 
     def __setattr__(self, name, value):
         """Sets attr only when it has been added by :meth:`add_config`."""
-        if name not in self._config:
+        if (name not in self._config) and (name not in self._private):
             message = '%s is unknown. Use "add_config" to add new attribute.'
             message = message % (name)
             raise RuntimeError(message)
         else:
             super().__setattr__(name, value)
 
-    def add_config(self, name, default_value):
-        """Tracks a config."""
+    def add_config(self, name, default_value, property=False):
+        """Tracks a config.
+
+        Args:
+            name (str): The name of the attribute.
+            default_value: The default value for this attribute.
+            property (bool): Set '_' + name instead for property decoration to
+                work appropriately.
+
+        """
         self._config.append(name)
-        setattr(self, name, default_value)
+        if property:
+            self._private.append('_' + name)
+            setattr(self, '_' + name, default_value)
+        else:
+            setattr(self, name, default_value)
 
     def __str__(self):
         """Prints out all configurations."""
@@ -81,13 +94,22 @@ class Config(metaclass=Singleton):
         name = '.'.join([self.__class__.__module__, self.__class__.__name__])
         message.append(name + ':')
         pattern = '    %%%ds: %%s' % max_config_len
-        for key in self._config:
+        for key in sorted(self._config):
             value = str(getattr(self, key))
             message.append(pattern % (key, value))
-        max_line_len = max([len(l) for l in message])
-        message.insert(0, '-' * max_line_len)
-        message.append('-' * max_line_len)
         return '\n'.join(message)
+
+    def has_config(self, name):
+        """Tests if it contains this config.
+
+        Args:
+            name (str): The name of the config to test.
+
+        Returns:
+            bool: Whether it has this config.
+
+        """
+        return name in self._config
 
     def load_json(self, filepath):
         """Loads configurations from a ``".json"`` file.
@@ -102,6 +124,10 @@ class Config(metaclass=Singleton):
 
     def load_dict(self, config):
         """Loads configurations from a :class:`dict`.
+
+        Note:
+            If a method ``_load_{config}`` exists, use that method to load this
+            config.
 
         Args:
             config (dict): The configurations to load.
@@ -125,7 +151,16 @@ class Config(metaclass=Singleton):
             json.dump(self.save_dict(), jfile, indent=4)
 
     def save_dict(self):
-        """Returns a :class:`dict` of all configurations."""
+        """Returns a :class:`dict` of all configurations.
+
+        Note:
+            If a method ``_save_{config}`` exists, use that method to export
+            this config.
+
+        Returns:
+            dict: The exported dict.
+
+        """
         result = dict()
         for key in self._config:
             save = '_save_%s' % key
