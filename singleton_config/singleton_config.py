@@ -21,9 +21,9 @@ class Singleton(type):
     """
     _instance = None
     def __call__(cls):
-        setattr = cls.__setattr__
-        cls.__setattr__ = object.__setattr__
         if cls._instance is None:
+            setattr = cls.__setattr__
+            cls.__setattr__ = object.__setattr__
             cls._instance = super().__call__()
             cls.__setattr__ = setattr
         return cls._instance
