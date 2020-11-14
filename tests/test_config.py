@@ -89,11 +89,10 @@ def test_config():
 
     os.remove(filename)
 
-    try:
-        config = Config2()
-        assert False
-    except RuntimeError as e:
-        assert str(e) == '_set_cc is not defined.'
+    config = Config2()
+    assert config.cc is Mode.M1
+    config.cc = Mode.M2
+    assert config.cc is Mode.M2
 
     print('all successful')
 
