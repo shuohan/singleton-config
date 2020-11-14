@@ -25,14 +25,18 @@ class Config(Config_):
     def _load_a(self, value):
         self.a = int(value)
 
-    @cc.setter
-    def cc(self, mode):
+    def _set_cc(self, mode):
         if isinstance(mode, Mode):
             self._cc = mode
         elif isinstance(mode, int):
             self._cc = Mode(mode)
         elif isinstance(mode, str):
             self._cc = Mode[mode]
+
+class Config2(Config_):
+    def __init__(self):
+        super().__init__()
+        self.add_config('cc', Mode.M1, True)
 
 
 def test_config():
@@ -84,6 +88,13 @@ def test_config():
     assert config1.d == 'hello world'
 
     os.remove(filename)
+
+    try:
+        config = Config2()
+        assert False
+    except RuntimeError as e:
+        assert str(e) == '_set_cc is not defined.'
+
     print('all successful')
 
 

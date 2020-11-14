@@ -89,9 +89,10 @@ class Config(metaclass=Singleton):
             setattr(self, name, default_value)
 
     def _define_default_property(self, name):
-        exec(f'def {name}(): return self._{name}')
-        exec(f'self.{name} = property({name})')
-        print(self.__dict__)
+        if not hasattr(self, f'_set_{name}'):
+            raise RuntimeError(f'_set_{name} is not defined.')
+        exec(f'def {name}(self): return self._{name}')
+        exec(f'self.__class__.{name} = property({name}, self.__class__._set_{name})')
         
     def __str__(self):
         """Prints out all configurations."""
