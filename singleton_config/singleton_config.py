@@ -84,9 +84,15 @@ class Config(metaclass=Singleton):
         if property:
             self._private.append('_' + name)
             setattr(self, '_' + name, default_value)
+            self._define_default_property(name)
         else:
             setattr(self, name, default_value)
 
+    def _define_default_property(self, name):
+        exec(f'def {name}(): return self._{name}')
+        exec(f'self.{name} = property({name})')
+        print(self.__dict__)
+        
     def __str__(self):
         """Prints out all configurations."""
         max_config_len = max([len(c) for c in self._config])

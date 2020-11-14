@@ -25,10 +25,6 @@ class Config(Config_):
     def _load_a(self, value):
         self.a = int(value)
 
-    @property
-    def cc(self):
-        return self._cc
-
     @cc.setter
     def cc(self, mode):
         if isinstance(mode, Mode):
