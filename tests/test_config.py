@@ -25,18 +25,18 @@ class Config(Config_):
     def _load_a(self, value):
         self.a = int(value)
 
-    @property
-    def cc(self):
-        return self._cc
-
-    @cc.setter
-    def cc(self, mode):
+    def _set_cc(self, mode):
         if isinstance(mode, Mode):
             self._cc = mode
         elif isinstance(mode, int):
             self._cc = Mode(mode)
         elif isinstance(mode, str):
             self._cc = Mode[mode]
+
+class Config2(Config_):
+    def __init__(self):
+        super().__init__()
+        self.add_config('cc', Mode.M1, True)
 
 
 def test_config():
@@ -88,6 +88,15 @@ def test_config():
     assert config1.d == 'hello world'
 
     os.remove(filename)
+
+    config = Config2()
+    assert config.cc is Mode.M1
+    try:
+        config.cc = Mode.M2
+        assert False
+    except AttributeError as e:
+        assert str(e) == 'can\'t set attribute'
+
     print('all successful')
 
 
