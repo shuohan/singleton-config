@@ -45,7 +45,7 @@ Examples
 2. Save and Load
 ----------------
 
-.. testcode:: 
+.. testcode::
 
    # Users can implement conversion functions for saving and loading a config
    class MyConfig(Config):
@@ -70,7 +70,7 @@ Examples
    config.load_dict({'a': '100'})
    print(config.a, type(config.a))
 
-.. testoutput:: 
+.. testoutput::
 
    100 <class 'int'>
 
@@ -79,3 +79,29 @@ Examples
    # Work with a json file
    config.save_json('config.json')
    config.load_json('config.json')
+
+3. Use property
+---------------
+
+First, add a config as property:
+
+.. code-block:: python
+
+   class MyConfig(Config):
+       def __init__(self):
+           super().__init__()
+           self.add_config('a', 10, property=True)
+
+       def _set_a(self, a):
+           # do something
+           self._a = a
+
+The class will add a private variable with the same name with the property but
+with a prefix '_'. For example, by calling
+
+>>> config.add_config('a', 10, property=True)
+
+``config`` will have a property ``a`` and a corresponding private attribute
+``_a``. The default property getter is to return the private attribute (e.g.
+``config._a``) without any setter. To add a setter without changing the default
+getter, a function ``_set_{property_name}`` should be defined (e.g. ``_set_a``).
