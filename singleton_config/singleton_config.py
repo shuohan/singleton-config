@@ -90,10 +90,10 @@ class Config(metaclass=Singleton):
 
     def _define_default_property(self, name):
         exec(f'def {name}(self): return self._{name}')
-        if not hasattr(self, f'_set_{name}'):
-            exec(f'def _set_{name}(self, value): self._{name} = value')
-            exec(f'self.__class__._set_{name} = _set_{name}')
-        exec(f'self.__class__.{name} = property({name}, self.__class__._set_{name})')
+        if hasattr(self, f'_set_{name}'):
+            exec(f'self.__class__.{name} = property({name}, self.__class__._set_{name})')
+        else:
+            exec(f'self.__class__.{name} = property({name})')
         
     def __str__(self):
         """Prints out all configurations."""

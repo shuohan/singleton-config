@@ -91,8 +91,11 @@ def test_config():
 
     config = Config2()
     assert config.cc is Mode.M1
-    config.cc = Mode.M2
-    assert config.cc is Mode.M2
+    try:
+        config.cc = Mode.M2
+        assert False
+    except AttributeError as e:
+        assert str(e) == 'can\'t set attribute'
 
     print('all successful')
 
